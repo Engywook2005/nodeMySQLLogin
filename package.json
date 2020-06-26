@@ -1,0 +1,11 @@
+{
+  "name": "nodemysqllogin",
+  "version": "1.0.0",
+  "description": "Basic node.js serving with mysql db and registration/login handling",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Greg Thorson",
+  "license": "MIT"
+}
