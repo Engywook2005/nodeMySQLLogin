@@ -1,0 +1,17 @@
+version: '2'
+services:
+    db:
+      image: mariadb:10
+      # Should be modified for each repo
+      container_name: mariadbgenlogin
+      restart: always
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        # Should be modified for each repo.
+        - MYSQL_DATABASE=genlogin
+        - MYSQL_USER=root
+        - MYSQL_PASSWORD=root
+      volumes:
+        - ./mySQLSchema:/mySQLSchema
+      ports:
+        - "3308:3306"
