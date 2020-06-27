@@ -16,13 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- (Re)create genlogin database
---
-
-DROP DATABASE IF EXISTS `genlogin`
-CREATE DATABASE `genlogin`
-
---
 -- Table structure for table `users`
 --
 

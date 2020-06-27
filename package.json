@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "localServer": "node server genlogin root root 127.0.0.1 3308"
+    "localServer": "node server genlogin root root 127.0.0.1 3308",
+    "makeDB": "docker exec mariadbgenlogin bin/bash ./mySQLSchema/createDB.sh"
   },
   "author": "Greg Thorson",
   "license": "MIT",
