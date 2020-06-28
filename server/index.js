@@ -31,18 +31,14 @@ const app = express(),
                 }
             )
         );
-
         app.use(express.static(`${process.cwd()}/html/public`));
-
         app.use(bodyParser.urlencoded({extended: true}));
-
         app.set('view engine', 'ejs');
 
         routing.init(app, mySQLConnex);
+        app.listen(8082);
 
         console.log('listening on port 8082');
-
-        app.listen(8082);
     };
 
 connectToMySQL(mySqlCallback);
