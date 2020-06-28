@@ -45,6 +45,52 @@ class QueryHub {
 
         return `INSERT INTO ${table} (${fields}) VALUES (${values})`;
     }
+
+    static selectQuery(table, props, where) {
+        const listSelectFields = (fields) => {
+            let returnFields = '';
+
+            for(let i = 0; i < fields.length; i++) {
+                const nextSpacer = (i === (fields.length - 1)) ?
+                    '' :
+                    ', ';
+
+                returnFields = `${returnFields}${fields[i]}${nextSpacer}`;
+            }
+
+            return returnFields;
+        },
+            selectFields = (props || props === '*') ?
+                '*' :
+                listSelectFields(props);
+
+        return `SELECT ${selectFields} FROM ${table}${QueryHub.handleWhere(where)};`
+    }
+
+    static handleWhere(where) {
+        let returnWhere = '';
+
+        if(!where) {
+            return returnWhere;
+        }
+
+        const keys = Object.keys(where);
+
+        returnWhere = ' WHERE ';
+
+        for(let i = 0; i < keys.length; i++) {
+
+            // @TODO should move this to a util function.
+            // @TODO for later... handle OR as well
+            const nextSpacer = (i === (keys.length - 1)) ?
+                '' :
+                ' AND ';
+
+            returnWhere = `${returnWhere}${keys[i]}=${where[keys[i]]}${nextSpacer}`;
+        }
+
+        return returnWhere;
+    }
 }
 
 module.exports = QueryHub;

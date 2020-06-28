@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const mysql = require('mysql');
 const mySQLInterface = require('../mysql');
 
 class MembershipRouting {
@@ -18,6 +19,35 @@ class MembershipRouting {
 
             // @TODO send back to '/' if there is a session token.
             response.render('membership/register');
+        });
+
+        this.app.post('/auth', (request, response) => {
+            const email = request.body.email,
+                pword = request.body.pword;
+
+                const callback = (err, results) =>
+                    {
+                        if(err) {
+                            // @TODO handle
+                        } else if(results && results.length === 1) {
+                            bcrypt.compare(pword, results[0].password, (err, res) => {
+                                if(res) {
+                                    request.session.token = Math.floor(Math.random() * 1000000000000);
+                                } else {
+                                    request.session.loginerror = 'Wrong username or password. Please try again';
+                                }
+                                response.redirect('/');
+                            })
+                        } else {
+                            request.session.loginerror = 'Wrong username or password. Please try again';
+                            response.redirect('/');
+                        }
+                    },
+                    where = {
+                        email: mysql.escape(email)
+                    };
+
+            mySQLInterface.execQuery(this.dbConnex, callback, 'SELECT', 'users', '*', where);
         });
 
         this.app.post('/register', (request, response) => {
