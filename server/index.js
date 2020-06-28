@@ -36,6 +36,8 @@ const app = express(),
 
         app.use(bodyParser.urlencoded({extended: true}));
 
+        app.set('view engine', 'ejs');
+
         routing.init(app, mySQLConnex);
 
         console.log('listening on port 8082');

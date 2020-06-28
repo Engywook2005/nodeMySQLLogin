@@ -1,0 +1,35 @@
+<html>
+<head>
+    <Title>Login page</Title>
+</head>
+<body>
+<div class="formBox">
+    <form name="login" action="/auth" method="POST">
+        <div class="formField">
+            <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    placeholder="Username"
+                    required
+            />
+        </div>
+        <div class="formField">
+            <input
+                    type="password"
+                    name="pword"
+                    id="pword"
+                    placeholder="Password"
+                    required
+            />
+        </div>
+        <div class="formField">
+            <input type="submit"/>
+        </div>
+    </form>
+</div>
+<div>
+    <p>No login? <a href="register.html">No problem! Click here to register.</a></p>
+</div>
+</body>
+</html>
