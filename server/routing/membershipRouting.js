@@ -33,6 +33,7 @@ class MembershipRouting {
                             bcrypt.compare(pword, results[0].password, (err, res) => {
                                 if(res) {
                                     request.session.token = Math.floor(Math.random() * 1000000000000);
+                                    request.session.user = results[0];
                                 } else {
                                     request.session.loginerror = 'Wrong username or password. Please try again';
                                 }

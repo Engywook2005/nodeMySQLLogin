@@ -8,9 +8,13 @@ class AppRouting {
             if(request.session.token) {
 
                 // @TODO push token into app/spa.
-                response.render('app/spa');
+                response.render('app/spa', {
+                   session: request.session
+                });
             } else {
-                response.render('membership/login');
+                response.render('membership/login', {
+                    session: request.session
+                });
             }
         });
     }

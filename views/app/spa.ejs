@@ -1,6 +1,13 @@
 <html>
     <head>
         <title>Welcome</title>
+        <script type = 'text/javascript'>
+            ((token) => {
+
+                // @TODO send token to app.
+                console.log(token);
+            })(<%= session.token %>);
+        </script>
     </head>
     <body>
         <div>

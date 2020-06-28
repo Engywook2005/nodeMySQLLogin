@@ -3,6 +3,11 @@
     <Title>Login page</Title>
 </head>
 <body>
+    <% if (session.loginerror) { %>
+        <div class="messages">
+            <p><%= session.loginerror %></p>
+        </div>
+    <% } %>
     <div class="formBox">
         <form name="login" action="/auth" method="POST">
             <div class="formField">

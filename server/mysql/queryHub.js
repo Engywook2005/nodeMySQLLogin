@@ -11,7 +11,8 @@ class QueryHub {
 
         try {
             const sql = queries[type](table, fields, where);
-            console.log(sql);
+
+            // @TODO env to determine whether we log the actual query for debugging purposes.
 
             mysqlConnex.query(sql, (error, results) => {
                 if(error) {
