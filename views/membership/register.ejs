@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <Title>Register here!</Title>
+    </head>
+    <body>
+        <% if (session && session.regerror) { %>
+        <div class="messages">
+            <p><%= session.regerror %></p>
+        </div>
+        <% } %>
+        <div class="formBox">
+            <form name="login" action="/register" method="POST">
+                <div class="formField">
+                    <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        placeholder="Email address"
+                        required
+                    />
+                </div>
+                <div class="formField">
+                    <input
+                        type="password"
+                        name="pword"
+                        id="pword"
+                        placeholder="Password"
+                        required
+                    />
+                </div>
+                <div class="formField">
+                    <input
+                        type="password"
+                        name="pword2"
+                        id="pword2"
+                        placeholder="Confirm password"
+                        required
+                    />
+                </div>
+                <div class="formField">
+                    <input type="submit"/>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
