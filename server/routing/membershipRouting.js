@@ -16,9 +16,14 @@ class MembershipRouting {
         });
 
         this.app.get('/register.html', (request, response) => {
+            if(request.session.token) {
+                response.redirect('/');
+                return;
+            }
 
-            // @TODO send back to '/' if there is a session token.
-            response.render('membership/register');
+            response.render('membership/register', {
+                session: request.session
+            });
         });
 
         this.app.post('/auth', (request, response) => {
@@ -28,7 +33,7 @@ class MembershipRouting {
                 const callback = (err, results) =>
                     {
                         if(err) {
-                            // @TODO handle
+                            response.send(`There is a great disturbance in the force. I sense ${err} has happened.`);
                         } else if(results && results.length === 1) {
                             bcrypt.compare(pword, results[0].password, (err, res) => {
                                 if(res) {
@@ -52,14 +57,15 @@ class MembershipRouting {
         });
 
         this.app.post('/register', (request, response) => {
-
-            // @TODO validate email
+            // @TODO validate email, verify not already there.
             const email = request.body.email,
                 pword = request.body.pword,
                 pword2 = request.body.pword2;
 
             if(pword !== pword2) {
-                // @TODO handle password mismatch
+                request.session.regerror = 'Passwords do not match; try again.'
+                response.redirect('/register.html');
+                return;
             }
 
             // @TODO password strength check
@@ -72,13 +78,10 @@ class MembershipRouting {
                         {
                             if(err) {
 
-                                console.log(`Oy vey... ${err}`);
                                 // @TODO handle
                             } else {
-
-                                console.log(JSON.stringify(result));
-                                // @TODO add welcome message at top.
-                                response.render('membership/login');
+                                request.session.welcome = 'Welcome!';
+                                response.redirect('/');
                             }
                         },
                         fields = {

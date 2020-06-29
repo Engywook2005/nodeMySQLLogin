@@ -3,6 +3,11 @@
         <Title>Register here!</Title>
     </head>
     <body>
+        <% if (session && session.regerror) { %>
+        <div class="messages">
+            <p><%= session.regerror %></p>
+        </div>
+        <% } %>
         <div class="formBox">
             <form name="login" action="/register" method="POST">
                 <div class="formField">

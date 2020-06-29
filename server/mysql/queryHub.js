@@ -23,9 +23,7 @@ class QueryHub {
             });
 
         } catch(err) {
-
-            // @TODO handle - use callback.
-            console.log(`MySQL error: ${err}`);
+            callback(err);
         }
     }
 
@@ -81,8 +79,8 @@ class QueryHub {
 
         for(let i = 0; i < keys.length; i++) {
 
-            // @TODO should move this to a util function.
-            // @TODO for later... handle OR as well
+            // @TODO move this to a util function.
+            // @TODO for later... handle OR as well.
             const nextSpacer = (i === (keys.length - 1)) ?
                 '' :
                 ' AND ';

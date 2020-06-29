@@ -3,10 +3,15 @@
     <Title>Login page</Title>
 </head>
 <body>
-    <% if (session.loginerror) { %>
+    <% if (session && session.loginerror) { %>
         <div class="messages">
             <p><%= session.loginerror %></p>
         </div>
+    <% } %>
+    <% if (session && session.welcome) { %>
+    <div class="messages">
+        <p><%= session.welcome %></p>
+    </div>
     <% } %>
     <div class="formBox">
         <form name="login" action="/auth" method="POST">
