@@ -71,14 +71,17 @@ class MembershipRouting {
             // @TODO password strength check
 
             // Insert new user registration. Error thrown by DB if we have already have somebody with this user id.
-            // @TODO make hashing a different function, perhaps in utils?
             bcrypt.hash(pword, 10, (err, hash) => {
                 if(hash) {
                     const callback = (err, result) =>
                         {
                             if(err) {
 
-                                // @TODO handle
+                                // @TODO error view.
+                                response.send(`Oops ${err}`);
+                                response.end();
+
+                                return;
                             } else {
                                 request.session.welcome = 'Welcome!';
                                 response.redirect('/');
@@ -99,7 +102,6 @@ class MembershipRouting {
             });
 
         });
-        // @TODO handle login - auth
     }
 }
 
