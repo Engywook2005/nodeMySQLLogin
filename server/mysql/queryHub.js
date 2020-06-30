@@ -1,95 +1,103 @@
 const mysql = require('mysql');
 
 class QueryHub {
-    static execQuery(mysqlConnex, callback, type, table, fields, where) {
-        const queries = {
-            SELECT: this.selectQuery,
-            INSERT: this.insertQuery,
-            UPDATE: this.updateQuery,
-            DELETE: this.deleteQuery
-        };
+  static execQuery(mysqlConnex, callback, type, table, fields, where) {
+    const queries = {
+      SELECT: this.selectQuery,
+      INSERT: this.insertQuery,
+      UPDATE: this.updateQuery,
+      DELETE: this.deleteQuery,
+    };
 
-        try {
-            const sql = queries[type](table, fields, where);
+    try {
+      const sql = queries[type](table, fields, where);
 
-            // @TODO env to determine whether we log the actual query for debugging purposes.
+      // @TODO env to determine whether we log the actual query for debugging purposes.
 
-            mysqlConnex.query(sql, (error, results) => {
-                if(error) {
-                    callback(error);
-                } else {
-                    callback(null, results);
-                }
-            });
-
-        } catch(err) {
-            callback(err);
+      mysqlConnex.query(sql, (error, results) => {
+        if (error) {
+          callback(error);
+        } else {
+          callback(null, results);
         }
+      });
+    } catch (err) {
+      callback(err);
+    }
+  }
+
+  static insertQuery(table, kvps) {
+    const keys = Object.keys(kvps);
+
+    let fields = '';
+    let values = '';
+
+    for (let i = 0; i < keys.length; i += 1) {
+      const nextSpacer = (i === (keys.length - 1))
+        ? ''
+        : ', ';
+
+      fields = `${fields}${keys[i]}${nextSpacer}`;
+      values = `${values}${mysql.escape(kvps[keys[i]])}${nextSpacer}`;
     }
 
-    static insertQuery(table, kvps) {
-        const keys = Object.keys(kvps);
+    return `INSERT INTO ${table} (${fields}) VALUES (${values})`;
+  }
 
-        let fields = '',
-            values = '';
+  static selectQuery(table, props, where) {
+    const listSelectFields = (fields) => {
+      let returnFields = '';
 
-        for(let i = 0; i < keys.length; i++) {
-            const nextSpacer = (i === (keys.length - 1)) ?
-                '' :
-                ', ';
+      for (let i = 0; i < fields.length; i += 1) {
+        const nextSpacer = (i === (fields.length - 1))
+          ? ''
+          : ', ';
 
-            fields = `${fields}${keys[i]}${nextSpacer}`;
-            values = `${values}${mysql.escape(kvps[keys[i]])}${nextSpacer}`;
-        }
+        returnFields = `${returnFields}${fields[i]}${nextSpacer}`;
+      }
 
-        return `INSERT INTO ${table} (${fields}) VALUES (${values})`;
+      return returnFields;
+    };
+    const selectFields = (props || props === '*')
+      ? '*'
+      : listSelectFields(props);
+
+    return `SELECT ${selectFields} FROM ${table}${QueryHub.handleWhere(where)};`;
+  }
+
+  static updateQuery() {
+    // @TODO
+    return '';
+  }
+
+  static deleteQuery() {
+    // @TODO
+    return '';
+  }
+
+  static handleWhere(where) {
+    let returnWhere = '';
+
+    if (!where) {
+      return returnWhere;
     }
 
-    static selectQuery(table, props, where) {
-        const listSelectFields = (fields) => {
-            let returnFields = '';
+    const keys = Object.keys(where);
 
-            for(let i = 0; i < fields.length; i++) {
-                const nextSpacer = (i === (fields.length - 1)) ?
-                    '' :
-                    ', ';
+    returnWhere = ' WHERE ';
 
-                returnFields = `${returnFields}${fields[i]}${nextSpacer}`;
-            }
+    for (let i = 0; i < keys.length; i += 1) {
+      // @TODO move this to a util function.
+      // @TODO for later... handle OR as well.
+      const nextSpacer = (i === (keys.length - 1))
+        ? ''
+        : ' AND ';
 
-            return returnFields;
-        },
-            selectFields = (props || props === '*') ?
-                '*' :
-                listSelectFields(props);
-
-        return `SELECT ${selectFields} FROM ${table}${QueryHub.handleWhere(where)};`
+      returnWhere = `${returnWhere}${keys[i]}=${where[keys[i]]}${nextSpacer}`;
     }
 
-    static handleWhere(where) {
-        let returnWhere = '';
-
-        if(!where) {
-            return returnWhere;
-        }
-
-        const keys = Object.keys(where);
-
-        returnWhere = ' WHERE ';
-
-        for(let i = 0; i < keys.length; i++) {
-
-            // @TODO move this to a util function.
-            // @TODO for later... handle OR as well.
-            const nextSpacer = (i === (keys.length - 1)) ?
-                '' :
-                ' AND ';
-
-            returnWhere = `${returnWhere}${keys[i]}=${where[keys[i]]}${nextSpacer}`;
-        }
-
-        return returnWhere;
-    }
+    return returnWhere;
+  }
 }
 
 module.exports = QueryHub;
