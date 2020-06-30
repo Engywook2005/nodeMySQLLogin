@@ -5,9 +5,16 @@
         <title>App of wonders</title>
         <script type="text/javascript">
             ((token) => {
+                window.app = window.app || [];
 
-                // @TODO send token to app.
-                console.log(token);
+                const passToken = function() {
+                    return {
+                      call: 'setToken',
+                      args: token
+                    };
+                }
+
+                window.app.push(passToken);
             })(<%= session.token %>);
         </script>
     </head>
