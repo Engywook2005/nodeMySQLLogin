@@ -3,48 +3,45 @@ const mysql = require('mysql');
 let instance = null;
 
 class MySQLConnex {
-    constructor() {
-        this.msConnex = null;
+  constructor() {
+    this.msConnex = null;
+  }
+
+  connect(database, user, password, host, port) {
+    if (!this.msConnex) {
+      this.msConnex = mysql.createConnection({
+        database,
+        user,
+        password,
+        host,
+        port,
+      });
+
+      this.msConnex.on('error', (err) => {
+        console.error(`MySQL error: ${err}`); // eslint-disable-line no-console
+      });
+
+      this.keepAlive();
     }
 
-    connect(database, user, password, host, port) {
-        if(!this.msConnex) {
+    return this.msConnex;
+  }
 
-            console.log('MySQL not connected. Connecting.');
+  keepAlive() {
+    console.log('Whacking that dead man\'s switch'); // eslint-disable-line no-console
 
-            this.msConnex = mysql.createConnection({
-                database: database,
-                user: user,
-                password: password,
-                host: host,
-                port: port
-            });
-
-            this.msConnex.on('error', (err) => {
-                console.log(`MySQL error: ${err}`)
-            });
-
-            this.keepAlive();
-        }
-
-        return this.msConnex;
-    }
-
-    keepAlive() {
-        console.log(`Whacking that dead man's switch`);
-
-        this.msConnex.query('SELECT 1;', () => {
-            setTimeout(() => {
-                this.keepAlive();
-            }, 540000);
-        });
-    }
+    this.msConnex.query('SELECT 1;', () => {
+      setTimeout(() => {
+        this.keepAlive();
+      }, 540000);
+    });
+  }
 }
 
 module.exports = () => {
-    if(!instance) {
-        instance = new MySQLConnex();
-    }
+  if (!instance) {
+    instance = new MySQLConnex();
+  }
 
-    return instance;
+  return instance;
 };

@@ -1,21 +1,21 @@
 class AppRouting {
-    constructor(app) {
-        this.app = app;
-    }
-    init() {
+  constructor(app) {
+    this.app = app;
+  }
 
-        this.app.get('/', (request, response) => {
-            if(request.session.token) {
-                response.render('app/spa', {
-                   session: request.session
-                });
-            } else {
-                response.render('membership/login', {
-                    session: request.session
-                });
-            }
+  init() {
+    this.app.get('/', (request, response) => {
+      if (request.session.token) {
+        response.render('app/spa', {
+          session: request.session,
         });
-    }
+      } else {
+        response.render('membership/login', {
+          session: request.session,
+        });
+      }
+    });
+  }
 }
 
 module.exports = AppRouting;
